@@ -2,30 +2,28 @@ const fse = require('fs-extra');
 const { resolve } = require('path');
 const {promisify} = require('util');
 const matter = require("gray-matter");
-
 const Article = require('./src/article');
-
-
 const ejsRenderFile = promisify(require('ejs').renderFile);
 // const globP = promisify(require('glob'));
-
-
 const config = require('./config')
-
 const contentPath = './content'
 const distPath = './public'
 const assetsPath = './assets'
 const layoutPath = './layout'
-
-
 const arguments = process.argv;
+
+
 const length = arguments.length;
 if(length < 3) {
     console.log("node build.js generate");
     return;
 }
-
 const command = arguments[2];
+
+/**
+ * generate static files
+ *
+ */
 if(command === "generate") {
     parse(contentPath)
         .then((articles) => generate(articles))
@@ -33,16 +31,14 @@ if(command === "generate") {
         .catch(err => console.error(err));
     return;
 }
-
-let newContent;
-if (length < 4 && command === "new") {
-    console.log("node build.js new posts/helloworld.md");
-    return;
+if(length >= 4 && command === "new") {
+    let newContent = arguments[3];
+    createNew(newContent);
 }
 
 
-newContent = arguments[3];
-createNew(newContent);
+
+
 function createNew(newContent){
     const array = newContent.split("/")
     const title = array[array.length - 1].split(".")[0].split("-").join(" ")
@@ -50,9 +46,6 @@ function createNew(newContent){
     fse.outputFile(resolve(contentPath, newContent), matter.stringify("hello world", {title, date}));
 }
 
-/**
- * Class representing a article (post)
- */
 
 
 // /**
