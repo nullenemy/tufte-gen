@@ -1,291 +1,254 @@
 ---
-title: Hello World
+title: Tufte Handout Sample
+author: David Peng
 ---
 
-# xmark = Markdown + Tufte CSS
-## Antonio Vieiro
+This sample text is from Dave Liepmann's [Tufte CSS](https://edwardtufte.github.io/tufte-css/).
 
-## A brief introduction
+Tufte CSS provides tools to style web articles using the ideas
+demonstrated by Edward Tufte's books and handouts. Tufte's style is
+known for its simplicity, extensive use of sidenotes, tight integration
+of graphics with text, and carefully chosen typography.
 
-[Markdown](https://daringfireball.net/projects/markdown/) is a plain text format for writing structured documents, based on formatting conventions from email and usenet.  It was developed in 2004 by John Gruber.
+Tufte CSS was created by [Dave Liepmann](http://www.daveliepmann.com)
+and is now an Edward Tufte project. The original idea was cribbed from
+[Tufte-!latex](https://tufte-latex.github.io/tufte-latex/)
+and [R Markdown's Tufte Handout
+format](http://rmarkdown.rstudio.com/tufte_handout_format.html). We give
+hearty thanks to all the people who have contributed to those projects.
 
-[CommonMark](http://commonmark.org) is a proposal for a standard, **unambiguous syntax specification for Markdown**, along with a **suite of comprehensive tests** to validate Markdown implementations against this specification. It was created by a group of [Markdown fans](http://commonmark.org).
+> If you see anything that Tufte CSS could improve, we welcome your
+contribution in the form of an issue or pull request on the GitHub
+project: [tufte-css](https://github.com/edwardtufte/tufte-css). Please
+note the [contribution
+guidelines](https://github.com/edwardtufte/tufte-css#contributing).
 
-[tufte-css](https://edwardtufte.github.io/tufte-css/) provides tools to style web articles using the ideas demonstrated by Edward Tufte's books and handouts. It was created by [Dave Liepmann](http://www.daveliepmann.com/) in late 2015 and is now an Edward Tufte project.
+Finally, a reminder about the goal of this project. The web is not
+print. Webpages are not books. Therefore, the goal of Tufte CSS is not
+to say “websites should look like this interpretation of Tufte's books”
+but rather “here are some techniques Tufte developed that we've found
+useful in print; maybe you can find a way to make them useful on the
+web”. Tufte CSS is merely a sketch of one way to implement this
+particular set of ideas. It should be a starting point, not a design
+goal, because any project should present their information as best suits
+their particular circumstances.
 
-[xmark](https://github.com/vieiro/xmark) is a simple XSLT stylesheet that transforms CommonMark compliant plain text documents ([see the source of this one here](https://raw.githubusercontent.com/vieiro/xmark/master/test.markdown)), with some additional conventions, into tufte-css styled web pages. 
+# Getting Started
 
-This document enumerates the goals of xmark, its conventions and explains how to use it.
-
-## xmark goals
-
-xmark has two main goals:
-
-### I: Generate tufte-css styled web pages
-
-The first goal of xmark is to generate tufte-css styled web pages from plain text files that follow the CommonMark specification.
-
-### II: Serve as an experimentation tool
-
-The second goal of xmark is to serve as a tool to manipulate the XML structure generated with CommonMark's cmark parser. By modifying a simple XSLT one can generate all sort of structured documents out from plain CommonMark text files.
-
-## xmark conventions
-
-Nor Markdown nor CommonMark support document metadata so, for instance, there is no standard way to specify a title in a CommonMark document. It is not possible either to mark a paragraph as an epigraph, or as a figure caption, or as a margin note. 
-
-[*Def. xmark convention*: a simple rule that allows emulating metadata in CommonMark markdown documents.](sidenote) These limitations in Markdown, and in the CommonMark standard, are overcome in xmark by means of conventions, that assign special meanings to paragraphs. This section lists these conventions:
-
-### Document title convention
-
-> The document title is the first section of the document with level one. This is, the first paragraph tagged with a single '#' in the markdown document.
-
-It does not matter where you hide the first level one tag in your markdown document: xmark always places the title as the first paragraph of the document, using an ```<h1>``` HTML tag. The title does not appear in the Table of Contents.
-
-
-``` markdown
-# This is the document title
-```
-
-Of course, the document title is also set in the ```<title>``` HTML tag of the resulting document.
-
-### Document sutbitle convention
-
-> The document subtitle is the first section of the document with level two. This is, the first paragraph tagged with a double '##' in the document.
-
-For instance:
-
-``` markdown
-## This is the document subtitle
-```
-
-It does not matter where you specify the subtitle in the source document, xmark always places the subtitle as the second paragraph of the document, using the ```<p class='subtitle'>``` tufte-css element. The subtitle does not appear in the Table of Contents.
-
-### Epigraph convention
-
-CommonMark does not support epigraphs, but allows for nested block quotes. xmark makes use of this feature, making the double-nested block quotes work as epigraphs:
-
-> Two-level nested block quotes (i.e., a pagraph starting with ```>>```) are always transformed to epigraphs. 
-
-So, for instance, this text:
-
-``` markdown
->> xmark epigraphs are started with two ```>``` at the beginning of the paragraph.
-```
-
-Will generate a tufte-css epigraph like this one:
-
->> xmark epigraphs are started with two ```>``` at the beginning of the paragraph.
-
-Epigraphs may also contain a footer using plain HTML, but you will have to specify the ```footer``` and ```cite``` in plain HTML, like this one:
-
-```markdown
->> I do not paint things, I paint only the differences between things.
->> <footer>Henri Matisse, <cite>Henri Matisse Dessins: 
->> thèmes et variations</cite> (Paris, 1943), 37</footer></blockquote>
-```
-
-That gets translated in the following HTML:
-
->> I do not paint things, I paint only the differences between things.
->> <footer>Henri Matisse, <cite>Henri Matisse Dessins: thèmes et variations</cite> (Paris, 1943), 37</footer></blockquote>
-
-### Sidenote convention
-
-Nor markdown nor CommonMark support sidenotes [Sidenotes are like footnotes, except they don't force the user to scroll the page](sidenote). 
-
-Markdown uses the ```[link text](url)``` structure to define links. xmark abuses this structure with the following convention:
-
-> Sidenotes are normal markdown links that use the word ```sidenote``` as its url.
-
-Sidenote numbers are automatically generated, so there's no need to worry about that detail.
-
-``` markdown
-This is a normal paragraph with a 
-sidenote [Write your sidenotes 
-inside square brackets and then 
-add a ```(sidenote)``` 
-url.](sidenote).
-```
-
-Will produce the following paragraph with a sidenote:
-
-This is a normal paragraph with a sidenote [Write your sidenotes inside square brackets and then add a ```(sidenote)``` url.](sidenote).
-
-As in tufte-css, sidenotes (and margin notes, below) are visible in wider screens, but are hidden in smaller screens. In these smaller screens, the symbol &#8853;  (``&#8853;``) or the sidenote number can be tapped to view the content.
-
-### Margin note convention
-
-Margin notes are just like sidenotes, but do not have footnote-style numbers. The xmark convention for margin notes is similar to the previous convention:
-
-> To create a margin note write a normal markdown link, but use the word ```margin``` as the url.
-
-So, for instance, the markdown text:
-
-```markdown
-For example, this paragraph has a 
-[Margin note text here](margin)
-margin note.
-```
-
-Will result in the following paragraph with a margin note:
-
-For example, this paragraph has a [Margin note text here](margin) margin note.
-
-
-### Figure convention
-
-CommonMark supports images by using the construction:
-
-```markdown
-![alt](url "title")]
-```
-
-that gets translated by CommonMark into the following HTML:
+To use Tufte CSS, copy `tufte.css` and the `et-book` directory of font
+files to your project directory, then add the following to your HTML
+document's `head` block:
 
 ```html
-<img src='url' alt='alt' title='title' />
+<link rel="stylesheet" href="tufte.css"/>
 ```
 
-Sadly nor CommonMark nor Markdown support figures with captions [(there's an ongoing discussion, though)](http://talk.commonmark.org/t/image-tag-should-expand-to-figure-when-used-with-title/265/5). 
+Now you just have to use the provided CSS rules, and the Tufte CSS
+conventions described in this document. For best results, View Source
+and Inspect Element frequently.
 
-To overcome this limitation xmark uses the following convention
+# Fundamentals
 
-> Use the 'alt' text as the caption for the figure, and abuse the 'title' text as both the HTML alt and the title.
+## Sections and Headings
 
-So, for instance, the following text:
+Organize your document with an `article` element inside your `body` tag.
+Inside that, use `section` tags around each logical grouping of text and
+headings.
 
-``` markdown
-![From Edward Tufte, *Visual Display of 
-Quantitative Information*, 
-page 92.](tufte-css/img/exports-imports.png 
-"Visual Display of Quantitative Information")
+Tufte CSS uses `h1` for the document title, `p` with class `subtitle`
+for the document subtitle, `h2` for section headings, and `h3` for
+low-level headings. More specific headings are not supported. If you
+feel the urge to reach for a heading of level 4 or greater, consider
+redesigning your document.
+
+As a bonus, this excerpt regarding the use of headings provides an
+example of block quotes. In Tufte CSS they are just lightly styled,
+semantically correct HTML using `blockquote` and `footer` elements. See
+page 20 of [The Visual Display of Quantitative
+Information](https://www.edwardtufte.com/tufte/books_vdqi) for an
+example in print.
+
+!newthought(In his later books)!sidenote(!em(!a(Beautiful Evidence)(http://www.edwardtufte.com/tufte/books_be))), Tufte
+starts each section with a bit of vertical space, a non-indented
+paragraph, and the first few words of the sentence set in small caps.
+For this we use a span with the class `newthought`, as demonstrated at
+the beginning of this paragraph. Vertical spacing is accomplished
+separately through `<section>` tags. Be consistent: though we do so in
+this paragraph for the purpose of demonstration, do not alternate use of
+header elements and the `newthought` technique. Pick one approach and
+stick to it.
+
+## Text
+
+Although paper handouts obviously have a pure white background, the web
+is better served by the use of slightly off-white and off-black colors.
+Tufte CSS uses `#fffff8` and `#111111` because they are nearly
+indistinguishable from their ‘pure' cousins, but dial down the harsh
+contrast. We stick to the greyscale for text, reserving color for
+specific, careful use in figures and images.
+
+In print, Tufte has used the proprietary Monotype Bembo !sidenote(See Tufte's
+comment in the !a(Tufte book
+fonts)(http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000Vt)
+thread.) font. A similar effect is achieved in digital
+formats with the now open-source
+[ETBook](https://github.com/edwardtufte/et-book), which Tufte CSS
+supplies with a `@font-face` reference to a .ttf file. In case ETBook
+somehow doesn't work, Tufte CSS shifts gracefully to other serif fonts
+like Palatino and Georgia.
+
+Also notice how Tufte CSS includes separate font files for bold (strong)
+and italic (emphasis), instead of relying on the browser to mechanically
+transform the text. This is typographic best practice.
+
+If you prefer sans-serifs, use the `sans` class. It relies on Gill Sans,
+Tufte's sans-serif font of choice.
+
+Links in Tufte CSS match the body text in color and do not change on
+mouseover or when clicked. Here is a [dummy example](#) that goes
+nowhere. These links are underlined, since this is the most widely
+recognized indicator of clickable text. !marginnote(Blue text, while also a widely
+recognizable clickable-text indicator, is crass and distracting.
+Luckily, it is also rendered unnecessary by the use of
+underlining.) However, because most browsers' default
+underlining does not clear descenders and is so thick and distracting,
+the underline effect is instead achieved using CSS trickery involving
+background gradients instead of standard `text-decoration`. Credit goes
+to Adam Schwartz for that technique.
+
+As always, these design choices are merely one approach that Tufte CSS
+provides by default. Other approaches, such as changing color on click
+or mouseover, or using highlighting or color instead of underlining to
+denote links, could also be made to work. The goal is to make sentences
+readable without interference from links, as well as to make links
+immediately identifiable even by casual web users.
+
+# Sidenotes: Footnotes and Marginal Notes
+
+One of the most distinctive features of Tufte's style is his extensive
+use of sidenotes.!sidenote(This is a sidenote.) Sidenotes are like
+footnotes, except they don't force the reader to jump their eye to the
+bottom of the page, but instead display off to the side in the margin.
+[^{-} From Edward Tufte, *Visual Display of Quantitative Information*, page 92.]
+Perhaps you have noticed their use in this document already. You are
+very astute.
+
+
+Sidenotes are a great example of the web not being like print. On
+sufficiently large viewports, Tufte CSS uses the margin for sidenotes,
+margin notes, and small figures. On smaller viewports, elements that
+would go in the margin are hidden until the user toggles them into view.
+The goal is to present related but not necessary information such as
+asides or citations *as close as possible* to the text that references
+them. At the same time, this secondary information should stay out of
+the way of the eye, not interfering with the progression of ideas in the
+main text.
+
+Sidenotes consist of two elements: a superscript reference number that
+goes inline with the text, and a sidenote with content. To add the
+former, just put a label and dummy checkbox into the text where you want
+the reference to go, like so:
+
+```html
+<label for="sn-demo" class="margin-toggle sidenote-number"></label>
+<input type="checkbox" id="sn-demo" class="margin-toggle"/>
 ```
 
-Will be transformed in the following ```<figure>```, ```<img>``` and ```<caption>```:
+You must manually assign a reference `id` to each side or margin note,
+replacing “sn-demo” in the `for` and the `id` attribute values with an
+appropriate descriptor. It is useful to use prefixes like `sn-` for
+sidenotes and `mn-` for margin notes.
 
-![From Edward Tufte, *Visual Display of Quantitative Information*, page 92.](tufte-css/img/exports-imports.png "Visual Display of Quantitative Information")
+Immediately adjacent to that sidenote reference in the main text goes
+the sidenote content itself, in a `span` with class `sidenote`. This tag
+is also inserted directly in the middle of the body text, but is either
+pushed into the margin or hidden by default. Make sure to position your
+sidenotes correctly by keeping the sidenote-number label close to the
+sidenote itself.
 
-Note that figures are automatically numbered by xmark.
+If you want a sidenote without footnote-style numberings, then you want
+a margin note.  !marginnote(This is a margin note. Notice there isn't a number
+preceding the note.) On large screens, a margin note is
+just a sidenote that omits the reference number. This lessens the
+distracting effect taking away from the flow of the main text, but can
+increase the cognitive load of matching a margin note to its referent
+text. However, on small screens, a margin note is like a sidenote except
+its viewability-toggle is a symbol rather than a reference number. This
+document currently uses the symbol  (`&#8853;`), but it's up to you.
 
-### Margin and full-width figure conventions
+Margin notes are created just like sidenotes, but with the `marginnote`
+class for the content and the `margin-toggle` class for the label and
+dummy checkbox. For instance, here is the code for the margin note used
+in the previous paragraph:
 
-Graphics that are ancillary to the main body of the text are placed in margin figures in tufte-css. 
-
-But CommonMark and Markdown have just a single construct for images.  ![F.J. Cole, “The History of Albrecht Dürer’s Rhinoceros in Zooological Literature,” *Science, Medicine, and History: Essays on the Evolution of Scientific Thought and Medical Practice (London, 1953)*, ed. E. Ashworth Underwood, 337-356. From page 71 of Edward Tufte’s *Visual Explanations*.](tufte-css/img/rhino.png "margin Rhino image") 
-
-How could xmark support margin figures easily? By abusing the construct, of course. 
-
-xmark abuses the title part of the image (that appears when you place the mouse over the image for a while), and if the title starts with the word 'margin' then the image is placed in a margin note, and if the title starts with the word 'fullwidth' then the image will be rendered as a full-width figure. The conventions are then:
-
-> If the title of the image starts with the word ```margin``` the figure will be placed in the margin.
-
-> If the title of the image starts with the word ```fullwidth``` the figure will be full-width.
-
-So any image constructed like this:
-
-```markdown
-![text caption here](image-name-or-url "margin Rhino image")
+```html
+<label for="mn-demo" class="margin-toggle">&#8853;</label>
+<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+<span class="marginnote">
+    This is a margin note. Notice there isn’t a number preceding the note.
+</span>
 ```
 
-(note the ```margin``` word at the beginning of the title) will be considered a margin figure.
+Figures in the margin are created as margin notes, as demonstrated in
+the next section.
 
-And the following markup:
-    
-```markdown
-![Edward Tufte’s English translation of the 
-Napoleon’s March data visualization. 
-From *Beautiful Evidence*, page
-122-124.](tufte-css/img/napoleons-march.png 
-"fullwidth Napoleon's march").
+# Figures
+
+Tufte emphasizes tight integration of graphics with text. Data, graphs,
+and figures are kept with the text that discusses them. In print, this
+means they are not relegated to a separate page. On the web, that means
+readability of graphics and their accompanying text without extra
+clicks, tab-switching, or scrolling.
+
+Figures should try to use the `figure` element, which by default are
+constrained to the main column. Don't wrap figures in a paragraph tag.
+Any label or margin note goes in a regular margin note inside the
+figure. For example, most of the time one should introduce a figure
+directly into the main flow of discussion, like so:
+
+!marginnote(From Edward Tufte, !em(Visual Display of Quantitative Information), page
+92.) !img(Exports and Imports to and from Denmark & Norway
+from 1700 to 1780)(tufte-css/img/exports-imports.png)
+
+!marginnote(!img(Image of a Rhinoceros)(tufte-css/img/rhino.png)F.J. Cole, “The History of
+Albrecht Dürer's Rhinoceros in Zooological Literature,” !em(Science,
+Medicine, and History: Essays on the Evolution of Scientific Thought and
+Medical Practice) (London, 1953), ed. E. Ashworth Underwood, 337-356.
+From page 71 of Edward Tufte's !em(Visual Explanations).) But
+tight integration of graphics with text is central to Tufte's work even
+when those graphics are ancillary to the main body of a text. In many of
+those cases, a margin figure may be most appropriate. To place figures
+in the margin, just wrap an image (or whatever) in a margin note inside
+a `p` tag, as seen to the right of this paragraph.
+
+If you need a full-width figure, give it the `fullwidth` class. Make
+sure that's inside an `article`, and it will take up (almost) the full
+width of the screen. This approach is demonstrated below using Edward
+Tufte's English translation of the Napoleon's March data visualization.
+From *Beautiful Evidence*, page 122-124.
+
+!fullwidthfigure(Figurative map of the successive losses of the French Army in the
+Russian campaign, 1812-1813)(tufte-css/img/napoleons-march.png)
+
+# Full-width text blocks
+
+!fullwidth(Many thanks go to Edward Tufte for leading the way with his work. It is only through his kind and careful editing that this project accomplishes what it does. All errors of implementation are of course mine.)
+
+# Use pp to preprocess Markdown
+
+We can use a list of macros defined below to generate a HTML or !latex file depend on the format.
+
+```c
+!rawinclude(pp-macros/tufte.pp)
 ```
 
-Will be rendered as:
+# Use Pandoc to convert Markdown to HTML and PDF
 
-![Edward Tufte’s English translation of the Napoleon’s March data visualization. From *Beautiful Evidence*, page 122-124.](tufte-css/img/napoleons-march.png "fullwidth Napoleon's march").
+!source(build-sample.sh)
 
-Note that the ```margin``` and ```fullwidth``` special words are removed from the resulting HTML figure title. As in Tufte-CSS, full-width images are also numbered automaticcally with xmark.
+# Acknowledgements
 
-### Source code convention
-
-Source code is translated to tufte-css equivalents, but CommonMark's ```info-string``` tag is kept, so it is possible to remember which programming language is being used for each part of the code.
-
-So, for instance, the markdown paragraph:
-
-```` markdown
-``` ruby
-def foo(x)
-        return 3
-end
-```
-````
-
-That is tagged as a Ruby program, will be translated to the HTML equivalent:
-
-``` html
-<pre class='code'><code class='language-ruby code'>def foo(x)
-        return 3
-end</code></pre>
-```
-
-## Deviations from tufte-css
-
-### Table of Contents
-
-xmark automatically generates a Table of Contents and places it in a marginnote at the top of the document.
-
-You can disable this feature by setting the XSLT parameter ```generate-toc``` to ```no``` (see below for an example).
-
-### Sections
-
-xmark does not generate ```<section>``` HTML 5 tags.
-
-### Syntax highlighting
-
-xmark automatically embeds some ```<script>``` and CSS stylesheets from [highlight.js](https://github.com/isagalaev/highlight.js) to enable language-specific syntax highlighting.
-
-You can disable this feature by setting the XSLT parameter ```highlight``` to ```no```.
-
-## Using xmark
-
-In order to use xmark one needs the following software:
-
-1. A CommonMark processor that generates XML, such as the excellent [John MacFarlane's cmark](https://github.com/jgm/cmark).
-2. The tufte-css project under the 'tufte-css' folder in a working directory of your liking.
-3. The xmark.xsl stylesheet, [available here](https://github.com/vieiro/xmark/blob/master/xmark.xsl).
-4. An XSLT processor, such as [xsltproc](http://www.xmlsoft.org). If you're using Mac OS/X, Linux or FreeBSD you may already have it installed.
-
-If you have cloned [xmark's github repository](https://github.com/vieiro/xmark) you can issue the ```git submodule init``` command to clone CommonMark's cmark and tufte-css projects.
-
-Once everything is set up you process your CommonMark file (```myfile.markdown```) with cmark, and then pipe that to xsltproc to generate an output file ```myfile.html```, like so:
-
-    cmark -t xml myfile.markdown | xsltproc --novalid --nonet xmark.xsl - > myfile.html
-
-Or, if you want to disable the Table of Contents:
-
-    cmark -t xml myfile.markdown | xsltproc --novalid --nonet \
-       --stringparam generate.toc no xmark.xsl - > myfile.html
-
-And, if you want to disable syntax highlighting:
-
-    cmark -t xml myfile.markdown | xsltproc --novalid --nonet \
-       --stringparam highlight no xmark.xsl - > myfile.html
-
-### License
-
-xmark is released under the MIT License.
-
-## Further reading
-
-Some links you may find of interest:
-
-* [Tufte CSS homepage](https://edwardtufte.github.io/tufte-css/)
-* [CommonMark homepage](http://commonmark.org)
-* [xmark's project page at github](https://github.com/vieiro/xmark).
-* [The source of this document](https://raw.githubusercontent.com/vieiro/xmark/master/test.markdown)
-* [This document as rendered by GitHub](https://github.com/vieiro/xmark/blob/master/test.markdown)
-
-## Epilogue
-
-Many thanks go to Edward Tufte, Dave Liepmann, John Gruber, John MacFarlane, Ivan Sagalaev and the CommonMark volunteers.
-
-
+- [Tufte CSS](https://edwardtufte.github.io/tufte-css/)
+- [RStudio Tufte Handout](https://rstudio.github.io/tufte/)
+- [R Markdown Tufte Style](https://rstudio.github.io/tufte/cn/)
+- [RStudio Pandoc template: tufte-handout.tex](https://raw.githubusercontent.com/rstudio/tufte/master/inst/rmarkdown/templates/tufte_handout/resources/tufte-handout.tex)

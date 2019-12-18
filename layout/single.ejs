@@ -1,5 +1,12 @@
 <%- include('_partials/header.ejs') %>
 <body>
+
+<h1><%= meta.title %></h1>
+<span class="numeral">
+    <% if (meta.date) { %>
+        <span><%= meta.date %></span>
+    <% } %>
+<span class="newthought"><%= meta.author %></span>
 <%- body %>
 
 </body>

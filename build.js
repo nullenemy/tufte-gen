@@ -2,16 +2,13 @@ const fse = require('fs-extra');
 const { resolve } = require('path');
 const {promisify} = require('util');
 const matter = require("gray-matter");
-const marked = require('marked');
-const configurePaser = require('@tufte-markdown/parser');
+
+const Article = require('./src/article');
+
 
 const ejsRenderFile = promisify(require('ejs').renderFile);
 // const globP = promisify(require('glob'));
-const options = {
-    react: false,
-}
 
-const parseMarkdown = configurePaser(options);
 
 const config = require('./config')
 
@@ -20,53 +17,51 @@ const distPath = './public'
 const assetsPath = './assets'
 const layoutPath = './layout'
 
+
+const arguments = process.argv;
+const length = arguments.length;
+if(length < 3) {
+    console.log("node build.js generate");
+    return;
+}
+
+const command = arguments[2];
+if(command === "generate") {
+    parse(contentPath)
+        .then((articles) => generate(articles))
+        .then(() => console.log("done"))
+        .catch(err => console.error(err));
+    return;
+}
+
+let newContent;
+if (length < 4 && command === "new") {
+    console.log("node build.js new posts/helloworld.md");
+    return;
+}
+
+
+newContent = arguments[3];
+createNew(newContent);
+function createNew(newContent){
+    const array = newContent.split("/")
+    const title = array[array.length - 1].split(".")[0].split("-").join(" ")
+    const date = new Date().toISOString();
+    fse.outputFile(resolve(contentPath, newContent), matter.stringify("hello world", {title, date}));
+}
+
 /**
  * Class representing a article (post)
  */
-class Article {
-    /**
-     *
-     * @param meta {object} - data for frontmatter
-     * @param content {string} - raw markdown content
-     * @param type {string} - content type and folder name for the articles
-     */
-    constructor(filename, meta, content, type) {
-        this.filename = filename;
-        this.meta = meta;
-        this.content = content;
-        this.type = type;
-    }
-    getMarked() {
-        return marked(this.content);
-    }
 
-    getHTMLFileName(){
-        return this.filename.split(".")[0] + ".html";
-    }
 
-    getTufteMarked() {
-        return parseMarkdown(this.content);
-    }
-}
-
-fse.emptyDirSync(distPath);
-
-/**
- * copy assets folder.
- * todo: need to put this in a theme
- */
-
-fse.copy(assetsPath, distPath)
-    .then(() => console.log('success!'))
-    .catch(err => console.error(err));
-
-/**
- * generate home page
- */
-ejsRenderFile(`${layoutPath}/index.ejs`, {...config})
-    .then((str) => fse.outputFile(`${distPath}/index.html`, str))
-    .then(() => console.log("write succeed"))
-    .catch(err => console.error(err));
+// /**
+//  * generate home page
+//  */
+// ejsRenderFile(`${layoutPath}/index.ejs`, {...config})
+//     .then((str) => fse.outputFile(`${distPath}/index.html`, str))
+//     .then(() => console.log("write succeed"))
+//     .catch(err => console.error(err));
 
 async function parse(contentPath) {
     const types = await fse.readdir(contentPath);
@@ -91,6 +86,8 @@ async function parse(contentPath) {
  * @returns {Promise<number[]>}
  */
 async function generate(articles) {
+    await fse.emptyDirSync(distPath);
+    await fse.copy(assetsPath, distPath)
     const p = await Promise.all(articles.map(async (article) => {
         const dir = resolve(distPath, article.type);
         await fse.ensureDir(dir);
@@ -103,8 +100,7 @@ async function generate(articles) {
     return p;
 }
 
+async function generateIndex(articles) {
 
-parse(contentPath)
-    .then((articles) => generate(articles))
-    .then(() => console.log("done"))
-    .catch(err => console.error(err));
+}
+
