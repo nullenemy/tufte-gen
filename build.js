@@ -55,7 +55,11 @@ function createNew(newContent){
 //     .then((str) => fse.outputFile(`${distPath}/index.html`, str))
 //     .then(() => console.log("write succeed"))
 //     .catch(err => console.error(err));
-
+/**
+ *
+ * @param contentPath
+ * @returns {Promise<any[]>}
+ */
 async function parse(contentPath) {
     const types = await fse.readdir(contentPath);
     const contents = await Promise.all(types.map(async (type) => {
@@ -90,10 +94,20 @@ async function generate(articles) {
         await fse.outputFile(outputFile, rendered);
         console.log("generated: ", outputFile);
     }))
-    return p;
+    const articleList = articles.map((article) => {
+        return {link: article.type+"/" + article.getHTMLFileName(), meta: article.meta}
+    })
+    const rendered = await ejsRenderFile(`${layoutPath}/index.ejs`, {...config, articleList});
+    await fse.outputFile(`${distPath}/index.html`, rendered);
 }
 
-async function generateIndex(articles) {
 
-}
+// async function generateIndex(articles) {
+//     const articleList = articles.map((article) => {
+//         return {link: resolve(article.type, article.getHTMLFileName()), meta: article.meta}
+//     })
+//     const rendered = await ejsRenderFile(`${layoutPath}/index.ejs`, {articleList});
+//     const res = fse.outputFile(`${distPath}/index.html`, rendered);
+//     return res;
+// }
 

@@ -7,6 +7,11 @@
 <% if (author) { %>
     <h2><%= author %></h2>
 <% } %>
+<ul>
+    <% articleList.forEach(function(article) { %>
+        <li><a href="<%= article.link %>"><%= article.meta.title %></a></li>
+    <% }); %>
+</ul>
 </body>
 </html>
 
