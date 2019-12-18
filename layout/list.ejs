@@ -1,0 +1,10 @@
+<%- include('_partials/header.ejs') %>
+<body>
+<ul>
+    <% items.forEach(function(item) { %>
+        <li><a href="<%= item %>"><%= item %></a></li>
+    <% }); %>
+</ul>
+
+
+</body>
