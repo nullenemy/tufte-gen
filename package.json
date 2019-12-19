@@ -2,11 +2,10 @@
   "name": "tufte-gen",
   "version": "1.0.0",
   "description": "",
-  "main": "build.js",
+  "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node build.js",
-    "serve": "live-server public"
+    "init": "node src/index.js init test-site",
+    "generate": "node src/index.js generate"
   },
   "keywords": [],
   "author": "",
@@ -14,10 +13,14 @@
   "dependencies": {
     "@tufte-markdown/parser": "^2.0.1",
     "chokidar": "^3.3.1",
+    "commander": "^4.0.1",
     "ejs": "^3.0.1",
+    "express": "^4.17.1",
     "front-matter": "^3.0.2",
     "fs-extra": "^8.1.0",
     "gray-matter": "^4.0.2",
-    "marked": "^0.8.0"
+    "live-server": "^1.2.1",
+    "marked": "^0.8.0",
+    "yaml": "^1.7.2"
   }
 }

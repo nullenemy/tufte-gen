@@ -1,10 +1,12 @@
 <%- include('_partials/header.ejs') %>
-<body>
+<main>
+<article>
 <ul>
     <% items.forEach(function(item) { %>
         <li><a href="<%= item %>"><%= item %></a></li>
     <% }); %>
 </ul>
-
-
+</article>
+</main>
 </body>
+</html>

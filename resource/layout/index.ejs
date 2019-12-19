@@ -1,17 +1,16 @@
 <%- include('_partials/header.ejs') %>
-<body>
+<main>
+<article>
 <% if (title) { %>
-    <h2><%= title %></h2>
-<% } %>
-
-<% if (author) { %>
-    <h2><%= author %></h2>
+    <h1><%= title %></h1>
 <% } %>
 <ul>
     <% articleList.forEach(function(article) { %>
         <li><a href="<%= article.link %>"><%= article.meta.title %></a></li>
     <% }); %>
 </ul>
+</article>
+</main>
 </body>
 </html>
 

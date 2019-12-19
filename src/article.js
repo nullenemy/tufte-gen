@@ -2,8 +2,8 @@ const configurePaser = require('@tufte-markdown/parser');
 const options = {
     react: false,
 }
-
 const parseMarkdown = configurePaser(options);
+
 class Article {
     /**
      *
